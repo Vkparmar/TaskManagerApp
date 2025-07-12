@@ -147,3 +147,11 @@ select {
 #toggleTheme {
   font-size: 14px;
 }
+
+/* Responsive in mobile screen */
+@media screen and (max-width: 600px) {
+  input, select, button {
+    width: 90%;
+  }
+}
+
