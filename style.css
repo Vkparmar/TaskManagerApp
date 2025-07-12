@@ -1,0 +1,149 @@
+/* ✅ Base Reset and Font */
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f6f8;
+  margin: 0;
+  padding: 30px;
+  transition: all 0.3s ease-in-out;
+  color: #333;
+}
+
+/* 🌙 Dark Theme Support */
+body.dark {
+  background-color: #1e1e1e;
+  color: #f9f9f9;
+}
+
+/* ✅ Heading */
+h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  color: #007bff;
+}
+
+/* 🎯 Input Section */
+.task-input {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+input[type="text"], select {
+  padding: 10px 15px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  outline: none;
+  transition: 0.3s;
+}
+
+input[type="text"]:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 3px #007bff;
+}
+
+/* 🧿 Buttons */
+button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  font-size: 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* 🌙 Dark Mode Button */
+body.dark button {
+  background-color: #333;
+  color: #f9f9f9;
+}
+
+button:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+
+/* ✅ Task List */
+#taskList {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+
+#taskList li {
+  background-color: #ffffff;
+  margin-bottom: 10px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  transition: 0.3s ease;
+}
+
+body.dark #taskList li {
+  background-color: #2c2c2c;
+  color: #f1f1f1;
+}
+
+#taskList li:hover {
+  transform: scale(1.01);
+}
+
+/* ✅ Completed Task Style */
+.completed {
+  text-decoration: line-through;
+  opacity: 0.5;
+  color: gray;
+}
+
+/* 🧾 Task text and buttons */
+li span {
+  flex: 1;
+  margin-left: 10px;
+  font-size: 16px;
+}
+
+/* 🧩 Task action buttons */
+li button {
+  margin-left: 5px;
+  background-color: transparent;
+  color: #007bff;
+  border: 1px solid transparent;
+  padding: 5px 8px;
+}
+
+li button:hover {
+  border: 1px solid #007bff;
+  border-radius: 6px;
+}
+
+/* 🌍 Controls Section */
+.controls {
+  text-align: center;
+  margin-top: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+select {
+  font-size: 14px;
+}
+
+/* 🌓 Toggle Theme Icon */
+#toggleTheme {
+  font-size: 14px;
+}
