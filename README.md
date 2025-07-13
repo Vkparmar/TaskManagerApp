@@ -52,8 +52,7 @@ TaskManagerApp/
 ├── index.html
 ├── style.css
 ├── script.js
-└── assets/
-└── screenshot.png
+├── screenshot.png
 
 
 ---
