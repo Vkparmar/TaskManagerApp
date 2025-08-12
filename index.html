@@ -1,36 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Manager App</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Task Manager App</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
 </head>
 <body>
-    <!-- Task Input Field  -->
+  <main>
     <h1>Task Manager</h1>
-    <div class="task-input">
-        <input type="text" id="taskInput" placeholder="Enter your task">
-        <button id="addTaskBtn">Add task</button>
-    </div>
+
+    <!-- Task Input Field  -->
+    <section class="task-input">
+      <label for="taskInput" class="visually-hidden">Enter your task</label>
+      <input
+        type="text"
+        id="taskInput"
+        placeholder="Enter your task"
+        aria-label="Task input"
+      />
+      <button id="addTaskBtn" aria-label="Add or update task">Add Task</button>
+    </section>
 
     <!-- Task List  -->
-    <ul id="taskList"></ul> 
+    <section>
+      <ul id="taskList" aria-live="polite" aria-label="Task list"></ul>
+    </section>
 
     <!-- Footer Controls  -->
-     <div class="controls">
-        <select name="" id="filter">
-            <option value="all">All</option>
-            <option value="completed">Completed</option>
-            <option value="pending">Pending</option>
-        </select>
-        <button id="clearCompleted">Clear Completed</button>
-        <button id="clearAll">Clear All</button>
-        <button id="toggleTheme">🌙 Toggle Theme</button>
-     </div>
+    <footer class="controls">
+      <label for="filter" class="visually-hidden">Filter tasks</label>
+      <select id="filter" aria-label="Filter tasks">
+        <option value="all">All</option>
+        <option value="completed">Completed</option>
+        <option value="pending">Pending</option>
+      </select>
+      <button id="clearCompleted">Clear Completed</button>
+      <button id="clearAll">Clear All</button>
+      <button id="toggleTheme" aria-pressed="false">🌙 Toggle Theme</button>
+    </footer>
+  </main>
 
-     <script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
