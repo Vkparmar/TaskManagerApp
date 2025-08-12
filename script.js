@@ -1,149 +1,86 @@
-// 📦 पहले से localStorage में जो "tasks" save हैं उन्हें लोड करें, वरना खाली array से शुरू करें
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+let editingIndex = -1;  // -1 मतलब कोई editing नहीं हो रही
 
-// 🔄 जब पेज लोड हो, तो सारे tasks को display करें
 showTasks(tasks);
 
-// 🔘 जब "Add Task" बटन क्लिक हो, तो एक नया task जोड़ें
-document.getElementById("addTaskBtn").addEventListener("click", function () {
-  // टेक्स्ट इनपुट से task का नाम लें
-  let taskInput = document.getElementById("taskInput");
-  let taskName = taskInput.value.trim(); // शुरुआत और अंत के खाली spaces हटाएं
+const taskInput = document.getElementById("taskInput");
+const addTaskBtn = document.getElementById("addTaskBtn");
 
-  if (taskName) {
-    // task object बनाएं (name + done = false)
+// Add or Update Task बटन पर क्लिक
+addTaskBtn.addEventListener("click", function () {
+  let taskName = taskInput.value.trim();
+
+  if (!taskName) return; // खाली input पर कुछ न करें
+
+  if (editingIndex === -1) {
+    // नया task add करें
     tasks.push({ name: taskName, done: false });
-
-    // input field को खाली कर दें
-    taskInput.value = "";
-
-    // localStorage में सेव करें
-    saveTasks();
-
-    // UI में updated list दिखाएं
-    showTasks(tasks);
+  } else {
+    // पहले से edit हो रहे task को update करें
+    tasks[editingIndex].name = taskName;
+    editingIndex = -1; // editing mode खत्म
+    addTaskBtn.innerText = "Add Task"; // बटन label वापस करें
   }
+
+  taskInput.value = "";
+  saveTasks();
+  showTasks(tasks);
 });
 
-// 💾 सभी tasks को localStorage में string की तरह सेव करें
-function saveTasks() {
-  localStorage.setItem("tasks", JSON.stringify(tasks)); // array को JSON string में बदलकर सेव करें
-}
-
-// 🧾 UI में tasks को दिखाने वाला function
+// UI में tasks दिखाने वाला function (थोड़ा बदलाव के साथ)
 function showTasks(filteredTasks = tasks) {
-  let taskList = document.getElementById("taskList"); // UL element को पकड़ें
-  taskList.innerHTML = ""; // पहले से मौजूद tasks हटा दें
+  let taskList = document.getElementById("taskList");
+  taskList.innerHTML = "";
 
-  // अगर कोई task नहीं है तो message दिखाएं
   if (filteredTasks.length === 0) {
     taskList.innerHTML = "<li>No Task Found</li>";
     return;
   }
 
-  // हर task को एक list item (li) के रूप में दिखाएं
   filteredTasks.forEach((task, index) => {
-    let li = document.createElement("li"); // नया <li> बनाएं
+    let li = document.createElement("li");
 
-    // ✅ Checkbox जो task को complete/ incomplete दिखाए
     let checkbox = document.createElement("input");
-    checkbox.type = "checkbox"; // input का type checkbox रखें
-    checkbox.checked = task.done; // अगर task पहले से complete है, तो tick करें
-
-    // जब checkbox बदलता है, तो task का status update करें
+    checkbox.type = "checkbox";
+    checkbox.checked = task.done;
     checkbox.onchange = function () {
-      task.done = this.checked; // true/false set करें
-      saveTasks();              // localStorage में सेव करें
-      showTasks(tasks);         // UI update करें
+      task.done = this.checked;
+      saveTasks();
+      showTasks(tasks);
     };
 
-    // 🖊️ Task का नाम एक <span> में दिखाएं
     let span = document.createElement("span");
-    span.innerText = task.name; // task का नाम दिखाएं
+    span.innerText = task.name;
+    if (task.done) span.classList.add("completed");
 
-    if (task.done) span.classList.add("completed"); // अगर task पूरा है तो style बदलें (CSS में line-through)
-
-    // 🖊️ Edit बटन बनाएँ
     let editBtn = document.createElement("button");
-    editBtn.innerText = "✏️"; // बटन में ✏️ icon
+    editBtn.innerText = "✏️";
     editBtn.onclick = function () {
-      document.getElementById("taskInput").value = task.name; // task name input में भरें
-      tasks.splice(index, 1); // पुराना task list से हटा दें
-      saveTasks();            // updated list को save करें
-      showTasks(tasks);       // UI update करें
+      // Editing mode शुरू करें
+      taskInput.value = task.name;
+      editingIndex = index;
+      addTaskBtn.innerText = "Update Task"; // बटन का label बदलें
     };
 
-    // ❌ Delete बटन बनाएँ
     let deleteBtn = document.createElement("button");
-    deleteBtn.innerText = "❌"; // बटन में ❌ icon
+    deleteBtn.innerText = "❌";
     deleteBtn.onclick = function () {
-      // Confirm popup दिखाएं
       if (confirm("Delete this task?")) {
-        tasks.splice(index, 1); // task array से हटाएं
-        saveTasks();            // updated list save करें
-        showTasks(tasks);       // UI update करें
+        tasks.splice(index, 1);
+        saveTasks();
+        showTasks(tasks);
       }
     };
 
-    // 🧱 सभी elements को <li> में जोड़ें
-    li.appendChild(checkbox);  // checkbox जोड़ें
-    li.appendChild(span);      // task का नाम
-    li.appendChild(editBtn);   // edit बटन
-    li.appendChild(deleteBtn); // delete बटन
+    li.appendChild(checkbox);
+    li.appendChild(span);
+    li.appendChild(editBtn);
+    li.appendChild(deleteBtn);
 
-    // <ul> में <li> जोड़ें
     taskList.appendChild(li);
   });
 }
 
-// 🔍 Filter dropdown change पर tasks को filter करें
-document.getElementById("filter").addEventListener("change", function () {
-  let filter = this.value; // चुना गया option (all, completed, pending)
-
-  // सभी tasks दिखाएं
-  if (filter === "all") {
-    showTasks(tasks);
-  }
-  // सिर्फ completed वाले tasks दिखाएं
-  else if (filter === "completed") {
-    showTasks(tasks.filter((task) => task.done));
-  }
-  // सिर्फ pending वाले tasks दिखाएं
-  else if (filter === "pending") {
-    showTasks(tasks.filter((task) => !task.done));
-  }
-});
-
-// 🗑️ "Clear Completed" बटन: सभी पूरे हुए tasks को हटाएं
-document.getElementById("clearCompleted").addEventListener("click", () => {
-  tasks = tasks.filter((task) => !task.done); // केवल pending tasks रखें
-  saveTasks();    // localStorage अपडेट करें
-  showTasks(tasks); // UI update करें
-});
-
-// 🧹 "Clear All" बटन: सभी tasks हटाएं
-document.getElementById("clearAll").addEventListener("click", () => {
-  // Confirm popup
-  if (confirm("Delete all tasks?")) {
-    tasks = []; // tasks array खाली करें
-    saveTasks();
-    showTasks(tasks);
-  }
-});
-
-// 🌙 Dark Mode Toggle बटन पर light/dark mode स्विच करें
-document.getElementById("toggleTheme").addEventListener("click", () => {
-  document.body.classList.toggle("dark"); // body में dark class toggle करें
-
-  // theme को localStorage में save करें
-  let isDark = document.body.classList.contains("dark");
-  localStorage.setItem("theme", isDark ? "dark" : "light");
-});
-
-// 🌗 Page reload होने पर theme restore करें
-window.onload = function () {
-  // अगर saved theme dark है तो dark class जोड़ें
-  if (localStorage.getItem("theme") === "dark") {
-    document.body.classList.add("dark");
-  }
-};
+function saveTasks() {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+}
