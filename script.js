@@ -1,25 +1,22 @@
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-let editingIndex = -1;  // -1 मतलब कोई editing नहीं हो रही
-
-showTasks(tasks);
+let editingIndex = -1;
 
 const taskInput = document.getElementById("taskInput");
 const addTaskBtn = document.getElementById("addTaskBtn");
+const filterSelect = document.getElementById("filter");
 
-// Add or Update Task बटन पर क्लिक
+showTasks(tasks);
+
 addTaskBtn.addEventListener("click", function () {
   let taskName = taskInput.value.trim();
-
-  if (!taskName) return; // खाली input पर कुछ न करें
+  if (!taskName) return;
 
   if (editingIndex === -1) {
-    // नया task add करें
     tasks.push({ name: taskName, done: false });
   } else {
-    // पहले से edit हो रहे task को update करें
     tasks[editingIndex].name = taskName;
-    editingIndex = -1; // editing mode खत्म
-    addTaskBtn.innerText = "Add Task"; // बटन label वापस करें
+    editingIndex = -1;
+    addTaskBtn.innerText = "Add Task";
   }
 
   taskInput.value = "";
@@ -27,9 +24,21 @@ addTaskBtn.addEventListener("click", function () {
   showTasks(tasks);
 });
 
-// UI में tasks दिखाने वाला function (थोड़ा बदलाव के साथ)
+// Filter tasks on dropdown change
+filterSelect.addEventListener("change", function () {
+  const filter = this.value;
+
+  if (filter === "all") {
+    showTasks(tasks);
+  } else if (filter === "completed") {
+    showTasks(tasks.filter((task) => task.done === true));
+  } else if (filter === "pending") {
+    showTasks(tasks.filter((task) => task.done === false));
+  }
+});
+
 function showTasks(filteredTasks = tasks) {
-  let taskList = document.getElementById("taskList");
+  const taskList = document.getElementById("taskList");
   taskList.innerHTML = "";
 
   if (filteredTasks.length === 0) {
@@ -38,39 +47,53 @@ function showTasks(filteredTasks = tasks) {
   }
 
   filteredTasks.forEach((task, index) => {
-    let li = document.createElement("li");
+    const li = document.createElement("li");
 
-    let checkbox = document.createElement("input");
+    const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.checked = task.done;
-    checkbox.onchange = function () {
-      task.done = this.checked;
-      saveTasks();
-      showTasks(tasks);
-    };
 
-    let span = document.createElement("span");
-    span.innerText = task.name;
-    if (task.done) span.classList.add("completed");
-
-    let editBtn = document.createElement("button");
-    editBtn.innerText = "✏️";
-    editBtn.onclick = function () {
-      // Editing mode शुरू करें
-      taskInput.value = task.name;
-      editingIndex = index;
-      addTaskBtn.innerText = "Update Task"; // बटन का label बदलें
-    };
-
-    let deleteBtn = document.createElement("button");
-    deleteBtn.innerText = "❌";
-    deleteBtn.onclick = function () {
-      if (confirm("Delete this task?")) {
-        tasks.splice(index, 1);
+    checkbox.addEventListener("change", () => {
+      // Update task.done on checkbox toggle
+      // Need to find index of this task in main tasks array
+      // Because filteredTasks may be subset, index here may differ
+      // So find actual index in tasks array
+      const taskIndex = tasks.findIndex(t => t.name === task.name && t.done === task.done);
+      if (taskIndex > -1) {
+        tasks[taskIndex].done = checkbox.checked;
         saveTasks();
         showTasks(tasks);
       }
-    };
+    });
+
+    const span = document.createElement("span");
+    span.innerText = task.name;
+    if (task.done) span.classList.add("completed");
+
+    const editBtn = document.createElement("button");
+    editBtn.innerText = "✏️";
+    editBtn.addEventListener("click", () => {
+      // Find actual index of this task in tasks array for editing
+      const taskIndex = tasks.findIndex(t => t.name === task.name && t.done === task.done);
+      if (taskIndex > -1) {
+        taskInput.value = tasks[taskIndex].name;
+        editingIndex = taskIndex;
+        addTaskBtn.innerText = "Update Task";
+      }
+    });
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.innerText = "❌";
+    deleteBtn.addEventListener("click", () => {
+      if (confirm("Delete this task?")) {
+        const taskIndex = tasks.findIndex(t => t.name === task.name && t.done === task.done);
+        if (taskIndex > -1) {
+          tasks.splice(taskIndex, 1);
+          saveTasks();
+          showTasks(tasks);
+        }
+      }
+    });
 
     li.appendChild(checkbox);
     li.appendChild(span);
