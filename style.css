@@ -1,6 +1,6 @@
-/* ✅ Base Reset and Font */
+/* Base Reset and Font */
 body {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Poppins", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f4f6f8;
   margin: 0;
   padding: 30px;
@@ -8,13 +8,13 @@ body {
   color: #333;
 }
 
-/* 🌙 Dark Theme Support */
+/* Dark Theme Support */
 body.dark {
   background-color: #1e1e1e;
   color: #f9f9f9;
 }
 
-/* ✅ Heading */
+/* Heading */
 h1 {
   text-align: center;
   font-size: 2.5rem;
@@ -22,7 +22,7 @@ h1 {
   color: #007bff;
 }
 
-/* 🎯 Input Section */
+/* Input Section */
 .task-input {
   display: flex;
   justify-content: center;
@@ -31,12 +31,14 @@ h1 {
   margin-bottom: 20px;
 }
 
-input[type="text"], select {
+input[type="text"] {
   padding: 10px 15px;
   font-size: 16px;
   border: 1px solid #ddd;
   border-radius: 8px;
   outline: none;
+  width: 300px;
+  max-width: 100%;
   transition: 0.3s;
 }
 
@@ -45,7 +47,7 @@ input[type="text"]:focus {
   box-shadow: 0 0 3px #007bff;
 }
 
-/* 🧿 Buttons */
+/* Buttons */
 button {
   background-color: #007bff;
   color: white;
@@ -55,13 +57,14 @@ button {
   border-radius: 8px;
   cursor: pointer;
   transition: background 0.3s ease;
+  white-space: nowrap;
 }
 
 button:hover {
   background-color: #0056b3;
 }
 
-/* 🌙 Dark Mode Button */
+/* Dark Mode Buttons */
 body.dark button {
   background-color: #333;
   color: #f9f9f9;
@@ -72,7 +75,7 @@ button:disabled {
   cursor: not-allowed;
 }
 
-/* ✅ Task List */
+/* Task List */
 #taskList {
   max-width: 600px;
   margin: 0 auto;
@@ -101,35 +104,38 @@ body.dark #taskList li {
   transform: scale(1.01);
 }
 
-/* ✅ Completed Task Style */
+/* Completed Task Style */
 .completed {
   text-decoration: line-through;
   opacity: 0.5;
   color: gray;
 }
 
-/* 🧾 Task text and buttons */
+/* Task text and buttons */
 li span {
   flex: 1;
   margin-left: 10px;
   font-size: 16px;
+  user-select: none;
 }
 
-/* 🧩 Task action buttons */
+/* Task action buttons */
 li button {
   margin-left: 5px;
   background-color: transparent;
   color: #007bff;
   border: 1px solid transparent;
   padding: 5px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
 }
 
 li button:hover {
   border: 1px solid #007bff;
-  border-radius: 6px;
 }
 
-/* 🌍 Controls Section */
+/* Controls Section */
 .controls {
   text-align: center;
   margin-top: 30px;
@@ -141,17 +147,49 @@ li button:hover {
 
 select {
   font-size: 14px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.3s ease;
 }
 
-/* 🌓 Toggle Theme Icon */
+select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 3px #007bff;
+}
+
+/* Toggle Theme Icon */
 #toggleTheme {
   font-size: 14px;
 }
 
-/* Responsive in mobile screen */
+/* Responsive for mobile */
 @media screen and (max-width: 600px) {
-  input, select, button {
+  input[type="text"], select, button {
     width: 90%;
+    max-width: none;
+  }
+
+  .task-input {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .controls {
+    flex-direction: column;
   }
 }
 
+/* Visually Hidden (for accessibility) */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; 
+  height: 1px; 
+  padding: 0; 
+  margin: -1px; 
+  overflow: hidden; 
+  clip: rect(0,0,0,0); 
+  border: 0;
+}
