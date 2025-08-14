@@ -104,6 +104,13 @@ function showTasks(filteredTasks = tasks) {
   });
 }
 
+const themeToggle = document.getElementById("themeToggle");
+themeToggle.addEventListener("click", () => {
+  document.body.classList.toggle("dark-theme");
+});
+
+
 function saveTasks() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
 }
+
