@@ -9,7 +9,7 @@ body {
 }
 
 /* Dark Theme Support */
-body.dark {
+body.dark-theme {
   background-color: #1e1e1e;
   color: #f9f9f9;
 }
@@ -193,3 +193,4 @@ select:focus {
   clip: rect(0,0,0,0); 
   border: 0;
 }
+
