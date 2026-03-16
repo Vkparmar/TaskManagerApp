@@ -109,6 +109,26 @@ themeToggle.addEventListener("click", () => {
   document.body.classList.toggle("dark-theme");
 });
 
+// Clear Completed Tasks
+const clearCompletedBtn = document.getElementById("clearCompleted");
+
+clearCompletedBtn.addEventListener("click", () => {
+  tasks = tasks.filter(task => task.done === false);
+  saveTasks();
+  showTasks(tasks);
+});
+
+
+// Clear All Tasks
+const clearAllBtn = document.getElementById("clearAll");
+
+clearAllBtn.addEventListener("click", () => {
+  if (confirm("Delete all tasks?")) {
+    tasks = [];
+    saveTasks();
+    showTasks(tasks);
+  }
+});
 
 function saveTasks() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
